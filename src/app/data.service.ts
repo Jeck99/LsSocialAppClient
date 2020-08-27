@@ -16,35 +16,68 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class DataService {
-
+  newDate = Date.now()
+  saveDate: Date;
   public first: string = "";
   public prev: string = "";
   public next: string = "";
   public last: string = "";
 
-  // private postsApiUrl = "https://cors-anywhere.herokuapp.com/http://localhost:3000/posts";
-  private postsApiUrl = "https://lssocialwebapplication20200827070211.azurewebsites.net/api/Posts";
+  private serverApiUrl = "https://lssocialwebapi.azurewebsites.net/api/";
 
   constructor(private httpClient: HttpClient) { }
-  //GET posts
-  public sendGetPostsRequest() {
-    return this.httpClient.get(this.postsApiUrl, { withCredentials: true }).pipe(retry(3), catchError(this.handleError));
+  //SIMPLE CRUD FUNCTIONS
+  //GET
+  public sendGetRequest(api: string) {
+    return this.httpClient.get(this.serverApiUrl + api, httpOptions).
+      pipe(retry(3), catchError(this.handleError));
   }
-  //GET FIRST 4 posts
-  public sendGetFirstFourPostsRequest() {
+  //GET FIRST 4 
+  public sendGetFirstFourPostsRequest(api: string) {
     // Add safe, URL encoded _page and _limit parameters 
-    return this.httpClient.get<Post>(this.postsApiUrl, { params: new HttpParams({ fromString: "_page=1&_limit=4" }), observe: "response" }).pipe(retry(3), catchError(this.handleError), tap(res => {
-      console.log(res.headers.get('Post'));
-      this.parsePostHeader(res.headers.get('Post'));
-    }));
+    return this.httpClient.get(this.serverApiUrl + api,
+      { params: new HttpParams({ fromString: "_page=1&_limit=4" }), observe: "response" })
+      .pipe(retry(3), catchError(this.handleError), tap(res => {
+        console.log(res.headers.get('Post'));
+        this.parsePostHeader(res.headers.get('Post'));
+      }));
   }
-  //GET FROM URL
-  public sendGetRequestToUrl(url: string) {
-    return this.httpClient.get<Post>(url, { withCredentials: true, observe: "response" }).pipe(retry(3), catchError(this.handleError), tap(res => {
-      console.log(res.headers.get('Post'));
-      this.parsePostHeader(res.headers.get('Post'));
-
-    }));
+  //GET/:id
+  public sendGetByIdRequest(itemId: string, api: string) {
+    return this.httpClient.get(`${this.serverApiUrl}${api}/${itemId}`, httpOptions).
+      pipe(catchError(this.handleError));
+  }
+  //working fine
+  addNewItemToDb(item: any, api: string): Observable<Post> {
+    return this.httpClient.post<any>(this.serverApiUrl + api, item, httpOptions).pipe(
+      tap((u: any) => console.log(`added ${api} w/ id=${u.id}`)),
+      catchError(this.handleCrudError<any>(`addposts${api}`))
+    );
+  }
+  //PUT
+  update(id: number, item: any, api: string): Observable<any> {
+    this.saveDate = new Date(this.newDate);
+    item.Updatedate = this.saveDate;
+    const url = `${this.serverApiUrl + api}/${id}`;
+    return this.httpClient.put(url, item, httpOptions).pipe(
+      tap(_ => console.log(`updated ${api}-id=${id}`)),
+      catchError(this.handleCrudError<any>(`update${api}`))
+    );
+  }
+  //DELETE
+  delete(id: string, api: string): Observable<any> {
+    const url = `${this.serverApiUrl + api}/${id}`;
+    return this.httpClient.delete<any>(url, httpOptions).pipe(
+      tap(_ => console.log(`deleted ${api}-id=${id}`)),
+      catchError(this.handleCrudError<any>(`delete${api}`))
+    );
+  }
+  //UPLOAD FILE
+  public upload(formData) {
+    return this.httpClient.post<any>(this.serverApiUrl, formData, {
+      reportProgress: true,
+      observe: 'events'
+    });
   }
   //ERROR HANDLING
   handleError(error: HttpErrorResponse) {
@@ -81,55 +114,6 @@ export class DataService {
     this.prev = Posts["prev"];
     this.next = Posts["next"];
   }
-  //SIMPLE CRUD FUNCTIONS
-  getPosts(): Observable<Post[]> {
-    return this.httpClient.get<Post[]>(this.postsApiUrl, httpOptions)
-      .pipe(
-        tap(posts => console.log('fetched posts')),
-        catchError(this.handleCrudError('getPosts', []))
-      );
-  }
-
-  getPostById(id: string): Observable<Post> {
-    const url = `${this.postsApiUrl}/${id}`;
-    return this.httpClient.get<Post>(url).pipe(
-      tap(_ => console.log(`fetched posts id=${id}`)),
-      catchError(this.handleCrudError<Post>(`getPostsById id=${id}`))
-    );
-  }
-  //working fine
-  addPost(post: Post): Observable<Post> {
-    return this.httpClient.post<Post>(this.postsApiUrl, post, httpOptions).pipe(
-      tap((u: Post) => console.log(`added posts w/ id=${u.id}`)),
-      catchError(this.handleCrudError<Post>('addposts'))
-    );
-  }
-  newDate = Date.now()
-  saveDate: Date;
-  updatePost(id: number, post: Post): Observable<any> {
-    this.saveDate = new Date(this.newDate);
-    post.Updatedate = this.saveDate;
-    const url = `${this.postsApiUrl}/${id}`;
-    return this.httpClient.put(url, post, httpOptions).pipe(
-      tap(_ => console.log(`updated posts id=${id}`)),
-      catchError(this.handleCrudError<any>('updateposts'))
-    );
-  }
-
-  deletePost(id: string): Observable<Post> {
-    const url = `${this.postsApiUrl}/${id}`;
-    return this.httpClient.delete<Post>(url, httpOptions).pipe(
-      tap(_ => console.log(`deleted posts id=${id}`)),
-      catchError(this.handleCrudError<Post>('deleteposts'))
-    );
-  }
-
-  public upload(formData) {
-    return this.httpClient.post<any>(this.postsApiUrl, formData, {
-      reportProgress: true,
-      observe: 'events'
-    });
-  }
   //GENERAL ERROR HANDLING FOR THE CRUD FUNCTIONS
   handleCrudError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
@@ -140,24 +124,24 @@ export class DataService {
   //working fine
   regisrer(user: User): Observable<User> {
     user.confirmPassword = user.password;
-    return this.httpClient.post<User>("https://lssocialwebapplication20200827070211.azurewebsites.net/api/Account/Register", user, httpOptions).pipe(
-      catchError(this.handleCrudError<User>('addUser'))
-    );
+    return this.httpClient.post<User>(`${this.serverApiUrl}Account/Register`, user, httpOptions)
+      .pipe(
+        catchError(this.handleCrudError<User>('addUser'))
+      );
   }
   //half working: CORS Error on unsafe chrome
   login(user: User): Observable<User> {
-    return this.httpClient.post<User>("https://lssocialwebapplication20200827070211.azurewebsites.net/Token", `userName=${user.email}&password=${user.password}&grant_type=password`, httpOptions).pipe(
-      tap(user => {localStorage.setItem('user', JSON.stringify(user));return user;}),
+    return this.httpClient.post<User>("https://lssocialwebapi.azurewebsites.net/Token", `userName=${user.email}&password=${user.password}&grant_type=password`, httpOptions).pipe(
+      tap(user => { localStorage.setItem('user', JSON.stringify(user)); return user; }),
       catchError(this.handleCrudError<User>('loginUser'))
     );
   }
-  getUserNameFromLocStor(userName:string) {
+  getUserNameFromLocStor(userName: string) {
     userName = JSON.parse(localStorage.getItem('user')).userName;
     return userName;
   }
-  getUserIdFromLocStor(userId:string) {
+  getUserIdFromLocStor(userId: string) {
     userId = JSON.parse(localStorage.getItem('user')).userId;
     return userId;
   }
 }
-// 66d4ad97-3df4-4cdf-bbd4-393f18a50b7d

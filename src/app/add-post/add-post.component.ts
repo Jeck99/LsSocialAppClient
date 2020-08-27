@@ -45,7 +45,6 @@ export class AddPostComponent implements OnInit {
     this.saveDate = new Date(this.newDate);
     this.isAddForm ? this.popNewPostForm() : this.popEditPost();
   }
-
   private popNewPostForm() {
     this.postsForm = this.formBuilder.group({
       name: [null, Validators.required],
@@ -56,7 +55,6 @@ export class AddPostComponent implements OnInit {
       userId: [this.userId]
     });
   }
-
   onFormSubmit() {
     this.isLoadingResults = true;
     this.isAddForm ? this.addNewPost() : this.updatePost();
@@ -70,9 +68,8 @@ export class AddPostComponent implements OnInit {
       image: [null]
     });
   }
-
   private addNewPost() {
-    this.dataService.addPost(this.postsForm.value)
+    this.dataService.addNewItemToDb(this.postsForm.value, 'posts')
       .subscribe((res: any) => {
         const id = res.id;
         this.isLoadingResults = false;
@@ -83,7 +80,7 @@ export class AddPostComponent implements OnInit {
       });
   }
   getPostById(id: any) {
-    this.dataService.getPostById(id).subscribe((data: any) => {
+    this.dataService.sendGetByIdRequest(id,'posts').subscribe((data: any) => {
       this.id = data.id;
       this.postsForm.setValue({
         name: data.name,
@@ -96,7 +93,7 @@ export class AddPostComponent implements OnInit {
     });
   }
   private updatePost() {
-    this.dataService.updatePost(this.id, this.postsForm.value)
+    this.dataService.update(this.id, this.postsForm.value, 'posts')
       .subscribe((res: any) => {
         const id = res.id;
         this.isLoadingResults = false;

@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
     this.pageOfItems = pageOfItems;
   }
   private getPosts() {
-    this.dataService.sendGetPostsRequest()
+    this.dataService.sendGetRequest('posts')
       .subscribe((res: any) => {
         console.log(res);
         this.items = res;
