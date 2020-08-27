@@ -23,7 +23,7 @@ export class DataService {
   public last: string = "";
 
   // private postsApiUrl = "https://cors-anywhere.herokuapp.com/http://localhost:3000/posts";
-  private postsApiUrl = "https://localhost:44324/api/Posts";
+  private postsApiUrl = "https://lssocialwebapplication20200827070211.azurewebsites.net/api/Posts";
 
   constructor(private httpClient: HttpClient) { }
   //GET posts
@@ -140,13 +140,13 @@ export class DataService {
   //working fine
   regisrer(user: User): Observable<User> {
     user.confirmPassword = user.password;
-    return this.httpClient.post<User>("https://localhost:44324/api/Account/Register", user, httpOptions).pipe(
+    return this.httpClient.post<User>("https://lssocialwebapplication20200827070211.azurewebsites.net/api/Account/Register", user, httpOptions).pipe(
       catchError(this.handleCrudError<User>('addUser'))
     );
   }
   //half working: CORS Error on unsafe chrome
   login(user: User): Observable<User> {
-    return this.httpClient.post<User>("https://localhost:44324/Token", `userName=${user.email}&password=${user.password}&grant_type=password`, httpOptions).pipe(
+    return this.httpClient.post<User>("https://lssocialwebapplication20200827070211.azurewebsites.net/Token", `userName=${user.email}&password=${user.password}&grant_type=password`, httpOptions).pipe(
       tap(user => {localStorage.setItem('user', JSON.stringify(user));return user;}),
       catchError(this.handleCrudError<User>('loginUser'))
     );
