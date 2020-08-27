@@ -1,0 +1,41 @@
+<div class="example-container mat-elevation-z8">
+    <h2>Edit Post</h2>
+    <div class="example-loading-shade" *ngIf="isLoadingResults">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+    <div class="button-row">
+        <a mat-flat-button color="primary" [routerLink]="['/home']">
+            <mat-icon>list</mat-icon>
+        </a>
+        <a mat-flat-button color="primary" (click)="showPostDetails()"><mat-icon>info</mat-icon></a>
+    </div>
+    <mat-card class="example-card">
+        <form [formGroup]="PostsForm" (ngSubmit)="onFormEditSubmit()">
+            <mat-form-field class="example-full-width">
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="Name" formControlName="name" [errorStateMatcher]="matcher">
+                <mat-error>
+                    <span *ngIf="!PostsForm.get('name').valid && PostsForm.get('name').touched">Please enter
+                        Name</span>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>description</mat-label>
+                <input matInput placeholder="description" formControlName="description" [errorStateMatcher]="matcher">
+                <mat-error>
+                    <span *ngIf="!PostsForm.get('description').valid && PostsForm.get('description').touched">Please enter
+                        description</span>
+                </mat-error>
+            </mat-form-field>
+            <mat-label>Upload</mat-label>
+            <input placeholder="Upload" formControlName="image" accept="image/*" type="file">
+
+            <div class="button-row">
+                <button type="submit" [disabled]="!PostsForm.valid" mat-flat-button color="primary">
+                    <mat-icon>save</mat-icon>
+                </button>
+            </div>
+        </form>
+    </mat-card>
+</div>
