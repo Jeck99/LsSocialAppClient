@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DataService } from '../data.service';
+import { DataService } from '../services/api.service';
 import { FormBuilder, FormGroup, Validators, FormControl, FormGroupDirective, NgForm, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MyErrorStateMatcher } from '../add-post/add-post.component';
@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
   form: FormGroup = new FormGroup({
     email: new FormControl(''),
     password: new FormControl(''),
+    confirmPassword: new FormControl(''),
   });
   ngOnInit(): void {
 

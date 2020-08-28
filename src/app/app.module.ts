@@ -3,11 +3,9 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RegisterComponent } from './register/register.component';
 import { PostComponent } from './post/post.component';
 import { HomeComponent } from './home/home.component';
 import { AddPostComponent } from './add-post/add-post.component';
-import { EditPostComponent } from './edit-post/edit-post.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -34,11 +32,9 @@ import { LoginComponent } from './login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
-    RegisterComponent,
     PostComponent,
     HomeComponent,
     AddPostComponent,
-    EditPostComponent,
     LoginComponent,
 
   ],

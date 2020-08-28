@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DataService } from '../data.service';
+import { DataService } from '../services/api.service';
 import { FormBuilder, FormGroup, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { AuthService } from '../services/auth.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -20,7 +21,7 @@ export class AddPostComponent implements OnInit {
   @ViewChild("fileUpload", { static: false }) fileUpload: ElementRef; files = [];
   userIdFromStorage: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, private dataService: DataService, private formBuilder: FormBuilder) { }
+  constructor(private router: Router, private route: ActivatedRoute, private dataService: DataService, private formBuilder: FormBuilder,private authService:AuthService) { }
   isAddForm = true;
   title = this.isAddForm ? 'Add New Post' : 'Edit Post';
   myDate = new Date();
@@ -36,9 +37,10 @@ export class AddPostComponent implements OnInit {
   Updatedate: Date;
   isLoadingResults = false;
   userId: string = this.userIdFromStorage;
+  likes:0;
 
   ngOnInit(): void {
-    this.userIdFromStorage = this.dataService.getUserIdFromLocStor(this.userIdFromStorage);
+    this.userIdFromStorage = this.authService.getUserIdFromLocStor();
     this.initPostForm();
   }
   private initPostForm() {
@@ -52,7 +54,8 @@ export class AddPostComponent implements OnInit {
       image: [null],
       CreationDate: [this.saveDate],
       Updatedate: [null],
-      userId: [this.userId]
+      userId: [this.userId],
+      likes:[0]
     });
   }
   onFormSubmit() {
@@ -65,7 +68,9 @@ export class AddPostComponent implements OnInit {
       name: [null, Validators.required],
       description: [null, Validators.required],
       CreationDate: [null],
-      image: [null]
+      image: [null],
+      userId:[null],
+      likes:[0]
     });
   }
   private addNewPost() {

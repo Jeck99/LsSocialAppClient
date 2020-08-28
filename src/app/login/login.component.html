@@ -2,36 +2,28 @@
     <div class="top"></div>
     <div class="bottom"></div>
     <div class="center">
-        <mat-card class="example-card">
-            <h1>{{isLoginForm? 'Login' : 'Register'}}</h1>
-            <form [formGroup]="form" (ngSubmit)="submit()">
-                <mat-form-field class="example-full-width">
-                    <mat-label>email</mat-label>
-                    <input type="email" matInput placeholder="Please Enter email" formControlName="email"
-                        [errorStateMatcher]="matcher">
-                    <mat-error>
-                        <span *ngIf="!form.get('email').valid && form.get('email').touched">Please
-                            enter email</span>
-                    </mat-error>
-                </mat-form-field>
-                <mat-form-field class="example-full-width">
-                    <mat-label>password</mat-label>
-                    <input matInput placeholder="Please Enter password" formControlName="password"
-                        [errorStateMatcher]="matcher">
-                    <mat-error>
-                        <span *ngIf="!form.get('password').valid && form.get('password').touched">Please
-                            enter password</span>
-                    </mat-error>
-                </mat-form-field>
+        <h1>{{isLoginForm? 'Login' : 'Register'}}</h1>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="form-field">
+                <label for="email"><b>Email</b></label>
+                <input formControlName="email" type="email" placeholder="Enter Email" name="email" required>
+            </div>
+            <div class="form-field">
+                <label for="password"><b>Password</b></label>
+                <input formControlName="password" type="password" placeholder="Enter Password" name="password" required>
+            </div>
+            <div class="form-field" *ngIf="!isLoginForm">
+                <label  for="confirmPassword"><b>Confierm Password</b></label>
+                <input formControlName="confirmPassword" type="password" placeholder="Enter Password Again"
+                    name="confirmPassword" required>
+            </div>
+            <div class="downButton">
+                <button color="primary" type="submit" mat-flat-button>{{isLoginForm? 'Login' : 'SignUp'}}</button>
+            </div>
 
-                <div class="downButton">
-                    <button color="primary" type="submit" mat-flat-button>{{isLoginForm? 'Login' : 'SignUp'}}</button>
-                </div>
-
-            </form>               
-             <div class="button">
-                    <button mat-flat-button  (click)="toggle()" >switch to {{!isLoginForm? 'Login' : 'SignUp'}}</button>
-                </div>
-        </mat-card>
+        </form>
+        <div class="button">
+            <button mat-flat-button (click)="toggle()">switch to {{!isLoginForm? 'Login' : 'SignUp'}}</button>
+        </div>
     </div>
 </div>

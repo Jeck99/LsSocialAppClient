@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Post } from '../post';
 
 @Component({
   selector: 'app-post',
@@ -8,8 +9,13 @@ import { Component, OnInit } from '@angular/core';
 export class PostComponent implements OnInit {
 
   constructor() { }
-
+  @Input() post: Post;
+  @Input() userId: string;
   ngOnInit(): void {
   }
-
+  likeIt(item) { return; }
+  updatePost(item:Post){
+    // if(item.userId=user.id){}
+    
+  }
 }

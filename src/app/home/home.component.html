@@ -1,14 +1,9 @@
-<h3 class="card-header">Angular 9 Pagination Example</h3>
-<div class="card text-center m-3">
-    <mat-card class="example-card" *ngFor="let item of items">
-        <mat-card-header>
-            <mat-icon *ngIf="item.userName == userName" (onClick)="updatePost(item)" title="Click To Edit Post">more_vert</mat-icon>
-            <div mat-card-avatar class="image"><img src="item.image" alt="item"></div>
-            <mat-card-title>{{item.Name}}</mat-card-title>
-            <mat-card-subtitle>{{item.Description}}</mat-card-subtitle>
-            <mat-card-subtitle>CreationDate: {{item.CreationDate}}</mat-card-subtitle>
-            <mat-card-subtitle *ngIf="item.Updatedate">Last Update date {{item.Updatedate}}</mat-card-subtitle>
-            <a *ngIf="item.likes" (onClick)="likeIt(item)">Like {{item.likes}}</a>
-        </mat-card-header>
-    </mat-card>
+<div class="homeDiv">
+    <h3 class="card-header">Hi {{userName}}</h3>
+    <a href="/add-post">Add Post</a>
+    <div class="card text-center m-3">
+        <mat-card class="example-card" *ngFor="let item of items">
+            <app-post [post]="item" [userId]="userId"></app-post>
+        </mat-card>
+    </div>
 </div>

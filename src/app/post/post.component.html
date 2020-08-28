@@ -1,1 +1,11 @@
-<p>post works!</p>
+<div class="postDiv">
+    <mat-card-header>
+        <div *ngIf="post.UserId == userId" (onClick)="updatePost(post)" title="Click To Edit Post">more_vert</div>
+        <div mat-card-avatar class="image"><img src="{{post.Image}}" alt="post"></div>
+        <mat-card-title>{{post.Name}}</mat-card-title>
+        <mat-card-subtitle>{{post.Description}}</mat-card-subtitle>
+        <mat-card-subtitle>CreationDate: {{post.CreationDate}}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="post.Updatedate">Last Update date {{post.Updatedate}}</mat-card-subtitle>
+        <a *ngIf="post.likes" (onClick)="likeIt(post)">Like {{post.likes}}</a>
+    </mat-card-header>
+</div>
