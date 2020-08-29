@@ -28,6 +28,11 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.sendToHome();
   }
+  private sendToHome() {
+    if (this.authService.getUserIdFromLocStor()) {
+      this.router.navigate(['/home']);
+    }
+  }
 
   toggle() {
     this.isLoginForm = !this.isLoginForm;
@@ -41,6 +46,7 @@ export class LoginComponent implements OnInit {
   private register() {
     this.dataService.regisrer(this.form.value)
       .subscribe((res: any) => {
+        this.isLoginForm = true;
         this.isLoadingResults = false;
         window.location.reload();
       }, (err: any) => {
@@ -58,10 +64,5 @@ export class LoginComponent implements OnInit {
         console.log(err);
         this.isLoadingResults = false;
       });
-  }
-  private sendToHome() {
-    if (this.authService.getUserIdFromLocStor()) {
-      this.router.navigate(['/home']);
-    }
   }
 }
