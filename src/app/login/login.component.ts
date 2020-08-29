@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit {
       .subscribe((res: any) => {
         this.isLoginForm = true;
         this.isLoadingResults = false;
-        window.location.reload();
       }, (err: any) => {
         console.log(err);
         this.isLoadingResults = false;
