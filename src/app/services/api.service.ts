@@ -118,7 +118,6 @@ export class DataService {
   }
   //working fine
   regisrer(user: User) : Observable<User> {
-    user.confirmPassword = user.password;
     return this.authService.regisrer(user)
   }
   //half working: CORS Error on unsafe chrome

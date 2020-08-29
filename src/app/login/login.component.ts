@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit {
   private register() {
     this.dataService.regisrer(this.form.value)
       .subscribe((res: any) => {
+        this.isLoginForm = true;
         this.isLoadingResults = false;
         this.router.navigate(['/home']);
       }, (err: any) => {
@@ -48,7 +49,6 @@ export class LoginComponent implements OnInit {
   private login() {
     this.dataService.login(this.form.value)
       .subscribe((res: any) => {
-        console.log(res);
         this.isLoadingResults = false;
         this.router.navigate(['/home']);
       }, (err: any) => {
