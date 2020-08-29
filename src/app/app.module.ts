@@ -8,11 +8,8 @@ import { HomeComponent } from './home/home.component';
 import { AddPostComponent } from './add-post/add-post.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { CommonModule } from '@angular/common';
-
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -28,6 +25,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { LoginComponent } from './login/login.component';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +34,7 @@ import { LoginComponent } from './login/login.component';
     HomeComponent,
     AddPostComponent,
     LoginComponent,
+    ErrorComponent,
 
   ],
   imports: [

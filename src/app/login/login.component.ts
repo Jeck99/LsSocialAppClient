@@ -37,9 +37,8 @@ export class LoginComponent implements OnInit {
   private register() {
     this.dataService.regisrer(this.form.value)
       .subscribe((res: any) => {
-        const id = res.id;
         this.isLoadingResults = false;
-        this.router.navigate(['/home', id]);
+        this.router.navigate(['/home']);
       }, (err: any) => {
         console.log(err);
         this.isLoadingResults = false;

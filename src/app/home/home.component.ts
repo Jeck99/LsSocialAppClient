@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   isLoadingResults: boolean;
   userName: string;
   userId: string;
-  constructor(private router: Router, private route: ActivatedRoute, private dataService: DataService, private formBuilder: FormBuilder, private authService: AuthService) { }
+  constructor( private dataService: DataService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.userId = this.authService.getUserIdFromLocStor();

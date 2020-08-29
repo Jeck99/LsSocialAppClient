@@ -31,12 +31,10 @@ export class AuthService {
     );
   }
   getUserNameFromLocStor() {
-    let userName = JSON.parse(localStorage.getItem('user')).userName;
-    return userName;
+    return JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).userName : null;
   }
   getUserIdFromLocStor() {
-    let userId = JSON.parse(localStorage.getItem('user')).userId;
-    return userId;
+    return JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).userId : null;
   }
   //ERROR HANDLING
   handleError(error: HttpErrorResponse) {
